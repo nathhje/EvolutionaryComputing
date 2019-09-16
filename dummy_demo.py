@@ -12,16 +12,17 @@ from ai_controller import player_controller
 from operator import itemgetter
 from crossbreed import *
 import random
+import matplotlib.pyplot as plt
 
 experiment_name = 'dummy_demo'
 if not os.path.exists(experiment_name):
     os.makedirs(experiment_name)
 
-N = 10 #Population size
+N = 20 #Population size
 
 
 
-numbergen = 20
+numbergen = 30
 growth = []
 
 # Opent random start population
@@ -31,6 +32,7 @@ for j in range(numbergen):
     listscores = []
     genfitness = 0
 
+    # check for the entire population the fitness
     for index, data in enumerate(alldata):
         fitness = fitnesscheck(data)
         listscores.append([index, fitness])
@@ -50,3 +52,10 @@ for j in range(numbergen):
     growth.append(genfitness/N)
 
 print(growth)
+plt.plot(growth)
+plt.show()
+
+with open("endresult.txt", "w") as txt_file:
+    for data in alldata:
+        for line in data:
+            txt_file.write(" ".join(str(line)) + "\n")
