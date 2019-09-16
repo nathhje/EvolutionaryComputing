@@ -421,7 +421,7 @@ class Environment(object):
 
         enemy = __import__('enemy'+str(self.enemyn))
 
-        self.load_sprites()
+        #self.load_sprites()
 
 
         # game main loop
@@ -468,10 +468,12 @@ class Environment(object):
                     return
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     return
-
+            
+            
+            self.tilemap.update( 33 / 1000., self)
+            '''
             # updates objects and draws its itens on screen
             self.screen.fill((250,250,250))
-            self.tilemap.update( 33 / 1000., self)
             self.tilemap.draw(self.screen)
 
             # player life bar
@@ -487,6 +489,7 @@ class Environment(object):
             pygame.draw.line(self.screen, (0,   0,   0), [590, 45],[695, 45], 5)
             pygame.draw.line(self.screen, (194,118,55),  [590, 45],[695 - vbar, 45], 5)
             pygame.draw.line(self.screen, (0,   0,   0), [590, 49],[695, 49], 2)
+            '''
 
 
             #gets fitness for training agents
