@@ -34,10 +34,6 @@ def cross(array1, array2):
             
         counter+=1
     
-    print(child)
-    print(array1)
-    print(array2)
-    
 
     return child
 
