@@ -1,6 +1,6 @@
 import random
 
-def cross(string1, string2):
+def cross(string1, string2, i):
 
     linearray1 = []
     linearray2 = []
@@ -16,7 +16,7 @@ def cross(string1, string2):
         for line in lines:
             linearray2.append(line)
 
-    with open("childtest.txt", "w") as f1:
+    with open("secondfolder/child" + str(i) + ".txt", "w") as f1:
         for i in range(len(linearray1)):
             if random.random() > 0.5:
                 f1.writelines(linearray1)

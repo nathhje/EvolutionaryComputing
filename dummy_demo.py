@@ -17,10 +17,12 @@ experiment_name = 'dummy_demo'
 if not os.path.exists(experiment_name):
     os.makedirs(experiment_name)
 
-N = 10
+N = 10 #Population size
 
 listscores = []
 genfitness = 0
+
+# Opent random start population
 for i in range(N):
     with open("randomstart/output"+ str(i) + ".txt") as f:
         lines = f.readlines()
@@ -29,21 +31,18 @@ for i in range(N):
 
 
     # initializes environment with ai player using random controller, playing against static enemy
-    env = Environment(experiment_name=experiment_name, player_controller=player_controller())
+    env = Environment(experiment_name=experiment_name, player_controller=player_controller(), speed="fastest")
     env.play()
+
+    # checkt de fitness en slaat het op
     listscores.append([i, env.fitness_single()])
     genfitness += env.fitness_single()
 
-#listscores.sort(key=takeSecond)
-# listscores.sort(key=lambda x: x[1])
-# listscores.reverse()
 print(genfitness/N)
 
 
 for i in range(N):
+    # Kiest twee parents tournament style
     win1, win2 = pickparents(N, listscores)
-    cross("randomstart/output"+ str(win1) + ".txt", "randomstart/output" + str(win2) + ".txt")
-    with open("childtest.txt") as f:
-        lines = f.readlines()
-        with open("secondfolder/child" + str(i) + ".txt", "w") as f1:
-            f1.writelines(lines)
+    # Crossbreed een nieuw child
+    cross("randomstart/output"+ str(win1) + ".txt", "randomstart/output" + str(win2) + ".txt", i)
