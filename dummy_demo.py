@@ -44,7 +44,12 @@ def main(popsize,gens):
             win1, win2 = pickparents(popsize, listscores)
             # Crossbreed een nieuw child
             newpopulation.append(cross(alldata[win1], alldata[win2]))
-    
+
+            mutation_decision = random.randint(0, 100)
+
+            if mutation_decision > 90:
+                mutate(newpopulation[i])  
+                  
         alldata = newpopulation
         growth.append(genfitness/popsize)
     
