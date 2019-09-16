@@ -7,13 +7,37 @@ from ai_controller import player_controller
 
 def cross(array1, array2):
     child = []
-
-    for i in range(len(array1)):
-        if random.random() > 0.5:
-            child.append(array1[i])
-            #print(i)
+    
+    gene_number = len(array1)
+    current_gene = len(child)
+    
+    parent = array1
+    counter = 0
+    
+    while current_gene<gene_number:
+        
+        max_length = min(50,gene_number-current_gene)
+        
+        inherit = random.randint(1,max_length)
+        inheritance = parent[current_gene:current_gene+inherit]
+        
+        for row in inheritance:
+        
+            child.append(row)
+        
+        current_gene = len(child)
+        
+        if counter%2==0:
+            parent = array2
         else:
-            child.append(array2[i])
+            parent = array1
+            
+        counter+=1
+    
+    print(child)
+    print(array1)
+    print(array2)
+    
 
     return child
 
@@ -30,12 +54,16 @@ def pickparents(N, listscores):
         else:
             win1 = b
 
-        a = random.randint(0, N - 1)
-        b = random.randint(0, N - 1)
-        if listscores[a][1] > listscores[b][1]:
-            win2 = a
-        else:
-            win2 = b
+        while True:
+            a = random.randint(0, N - 1)
+            b = random.randint(0, N - 1)
+            if listscores[a][1] > listscores[b][1]:
+                win2 = a
+            else:
+                win2 = b
+                
+            if win1 != win2:
+                break
     return (win1, win2)
 
 def genrandomstart(N):
