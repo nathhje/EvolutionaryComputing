@@ -10,7 +10,7 @@ sys.path.insert(0, 'evoman')
 from environment import Environment
 from ai_controller import player_controller
 from operator import itemgetter
-from crossbreed import cross, pickparents
+from crossbreed import *
 import random
 
 experiment_name = 'dummy_demo'
@@ -19,30 +19,34 @@ if not os.path.exists(experiment_name):
 
 N = 10 #Population size
 
-listscores = []
-genfitness = 0
+
+
+numbergen = 20
+growth = []
 
 # Opent random start population
-for i in range(N):
-    with open("randomstart/output"+ str(i) + ".txt") as f:
-        lines = f.readlines()
-        with open("output.txt", "w") as f1:
-            f1.writelines(lines)
+alldata = genrandomstart(N)
 
+for j in range(numbergen):
+    listscores = []
+    genfitness = 0
 
-    # initializes environment with ai player using random controller, playing against static enemy
-    env = Environment(experiment_name=experiment_name, player_controller=player_controller(), speed="fastest")
-    env.play()
+    for index, data in enumerate(alldata):
+        fitness = fitnesscheck(data)
+        listscores.append([index, fitness])
+        genfitness += fitness
 
-    # checkt de fitness en slaat het op
-    listscores.append([i, env.fitness_single()])
-    genfitness += env.fitness_single()
+    print("De "+ str(j) + "e generatie heeft een gemiddelde score van ", genfitness/N)
 
-print(genfitness/N)
+    # Make N new individuals for the next generation
+    newpopulation = []
+    for i in range(N):
+        # Kiest twee parents tournament style
+        win1, win2 = pickparents(N, listscores)
+        # Crossbreed een nieuw child
+        newpopulation.append(cross(alldata[win1], alldata[win2]))
 
+    alldata = newpopulation
+    growth.append(genfitness/N)
 
-for i in range(N):
-    # Kiest twee parents tournament style
-    win1, win2 = pickparents(N, listscores)
-    # Crossbreed een nieuw child
-    cross("randomstart/output"+ str(win1) + ".txt", "randomstart/output" + str(win2) + ".txt", i)
+print(growth)

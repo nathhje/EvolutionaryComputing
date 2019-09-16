@@ -1,28 +1,22 @@
 import random
+import numpy as np
+experiment_name = 'dummy_demo'
+from environment import Environment
+from ai_controller import player_controller
 
-def cross(string1, string2, i):
 
-    linearray1 = []
-    linearray2 = []
+def cross(array1, array2):
+    child = []
 
+    for i in range(len(array1)):
+        if random.random() > 0.5:
+            child.append(array1[i])
+            #print(i)
+        else:
+            child.append(array2[i])
 
-    with open(string1) as f:
-        lines = f.readlines()
-        for line in lines:
-            linearray1.append(line)
+    return child
 
-    with open(string2) as f:
-        lines = f.readlines()
-        for line in lines:
-            linearray2.append(line)
-
-    with open("secondfolder/child" + str(i) + ".txt", "w") as f1:
-        for i in range(len(linearray1)):
-            if random.random() > 0.5:
-                f1.writelines(linearray1)
-                #print(i)
-            else:
-                f1.writelines(linearray1)
 
 def pickparents(N, listscores):
     win1 = 0
@@ -43,3 +37,22 @@ def pickparents(N, listscores):
         else:
             win2 = b
     return (win1, win2)
+
+def genrandomstart(N):
+    alldata = []
+    for i in range(N):
+        data =  np.random.randint(2, size=(300, 6))
+        alldata.append(data)
+    return alldata
+
+def fitnesscheck(data):
+
+    with open("output.txt", "w") as txt_file:
+        for line in data:
+            txt_file.write(" ".join(str(line)) + "\n")
+
+    # initializes environment with ai player using random controller, playing against static enemy
+    env = Environment(experiment_name=experiment_name, player_controller=player_controller(), speed="fastest")
+    env.play()
+
+    return env.fitness_single()
