@@ -18,7 +18,11 @@ def cross(array1, array2):
         
         max_length = min(50,gene_number-current_gene)
         
-        inherit = random.randint(1,max_length)
+        inherit = random.randint(1,50)
+        
+        if inherit > max_length:
+            inherit = max_length
+            
         inheritance = parent[current_gene:current_gene+inherit]
         
         for row in inheritance:
