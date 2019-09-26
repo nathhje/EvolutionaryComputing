@@ -112,13 +112,15 @@ def mutate(individual, mutation_rate):
     # krijgt een individu een mutatie
     if mutation_decision < mutation_rate * 100:
 
-        number_of_genes = 1500
+        number_of_genes = 300
 
         # hoeveel mutaties krijgt een individu
-        mut_rate_calc = np.random.normal((number_of_genes * mutation_rate), 5, 1)
+        mut_rate_calc = min(np.random.normal((number_of_genes * mutation_rate), 5, 1), 300)
 
+        print(len(individual))
+        print(mut_rate_calc)
         # welke genen (regels) worden er aangepast
-        which_genes = random.sample(range(300), mut_rate_calc)
+        which_genes = random.sample(range(len(individual)), int(mut_rate_calc))
 
         for gene in which_genes:
 
