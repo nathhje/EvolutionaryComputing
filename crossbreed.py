@@ -6,40 +6,48 @@ from ai_controller import player_controller
 
 
 def cross(array1, array2):
-    child = []
+    child1 = []
+    child2 = []
     
     gene_number = len(array1)
-    current_gene = len(child)
+    current_gene = len(child1)
     
-    parent = array1
+    parent1 = array1
+    parent2 = array2
     counter = 0
     
     while current_gene<gene_number:
         
-        max_length = min(50,gene_number-current_gene)
+        max_length = gene_number-current_gene
         
         inherit = random.randint(1,50)
         
         if inherit > max_length:
             inherit = max_length
             
-        inheritance = parent[current_gene:current_gene+inherit]
+        inheritance1 = parent1[current_gene:current_gene+inherit]
+        inheritance2 = parent2[current_gene:current_gene+inherit]
         
-        for row in inheritance:
+        for row in inheritance1:
         
-            child.append(row)
+            child1.append(row)
+            
+        for row in inheritance2:
+            child2.append(row)
         
-        current_gene = len(child)
+        current_gene = len(child1)
         
         if counter%2==0:
-            parent = array2
+            parent1 = array2
+            parent2 = array1
         else:
-            parent = array1
+            parent1 = array1
+            parent2 = array2
             
         counter+=1
     
 
-    return child
+    return child1, child2
 
 
 def pickparents(N, listscores):

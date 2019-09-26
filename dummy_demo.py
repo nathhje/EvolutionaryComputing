@@ -40,16 +40,20 @@ def main(popsize,gens):
 
         # Make N new individuals for the next generation
         newpopulation = []
-        for i in range(popsize):
+        for i in range(int(popsize/2)):
             # Kiest twee parents tournament style
             win1, win2 = pickparents(popsize, listscores)
             # Crossbreed een nieuw child
-            newpopulation.append(cross(alldata[win1], alldata[win2]))
+            child1,child2 = cross(alldata[win1], alldata[win2])
+            newpopulation.append(child1)
+            newpopulation.append(child2)
+            print("nieuwe ronde, nieuwe kansen")
+            for j in range(2):
+                print(j)
+                mutation_decision = random.randint(0, 100)
 
-            mutation_decision = random.randint(0, 100)
-
-            if mutation_decision > 90:
-                mutate(newpopulation[i])
+                if mutation_decision > 90:
+                    mutate(newpopulation[2*i+j])
 
         alldata = newpopulation
         growth.append(genfitness/popsize)
@@ -64,4 +68,4 @@ def main(popsize,gens):
                 txt_file.write(" ".join(str(line)) + "\n")
 
 if __name__ == '__main__':
-    main(20,30)
+    main(6,30)
