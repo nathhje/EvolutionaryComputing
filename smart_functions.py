@@ -115,10 +115,8 @@ def mutate(individual, mutation_rate):
         number_of_genes = 300
 
         # hoeveel mutaties krijgt een individu
-        mut_rate_calc = min(np.random.normal((number_of_genes * mutation_rate), 5, 1), 300)
+        mut_rate_calc = min(np.random.poisson((number_of_genes * mutation_rate), 1), 300)
 
-        print(len(individual))
-        print(mut_rate_calc)
         # welke genen (regels) worden er aangepast
         which_genes = random.sample(range(len(individual)), int(mut_rate_calc))
 
