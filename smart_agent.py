@@ -35,7 +35,7 @@ if not os.path.exists(experiment_name):
     # pop_ranked = rank_scores(current_generation) #2
 
 # The genetic algorithm
-def main(pop_size, mutation_rate, nr_generations):
+def main(pop_size, mutation_rate, nr_generations, parentchoice="Tournament"):
     growth = []
 
     # 1. Create the population
@@ -58,10 +58,17 @@ def main(pop_size, mutation_rate, nr_generations):
 
         # Make N new individuals for the next generation
         newpopulation = []
+        if parentchoice != "Tournament":
+            listscores = cumsort(listscores)
+            print("Tournament")
+
         for i in range(int(pop_size/2)):
             # 3. Select the mating pool
             # Kiest twee parents tournament style
-            win1, win2 = pickparents(pop_size, listscores)
+            if parentchoice == "Tournament":
+                win1, win2 = pickparents(pop_size, listscores)
+            else:
+                win1, win2 = pickparentscumsort(listscores)
 
             # 4. Breed
             # Crossbreed een nieuw child
@@ -69,6 +76,7 @@ def main(pop_size, mutation_rate, nr_generations):
             newpopulation.append(child1)
             newpopulation.append(child2)
             print("nieuwe ronde, nieuwe kansen")
+            print(win1, win2)
 
             # 5. Mutate
             mutate(newpopulation[i], mutation_rate)

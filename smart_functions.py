@@ -3,6 +3,7 @@ import numpy as np
 experiment_name = 'dummy_demo'
 from environment import Environment
 from ai_controller import player_controller
+from operator import itemgetter
 
 # 1. Create the population
 # 2. Determine fitness
@@ -130,3 +131,40 @@ def mutate(individual, mutation_rate):
 
             else:
                 individual[gene][which_action] = 0
+
+def pickparentscumsort(listscores):
+    print(listscores)
+    wina = np.random.random()
+    winb = np.random.random()
+
+    print(wina, winb)
+    bool1 = True
+    bool2 = True
+    for el in listscores:
+        if el[1] > wina and bool1:
+            win1 = el[0]
+            bool1 = False
+        if el[1] > winb and bool2:
+            win2 = el[0]
+            bool2 = False
+
+    print(win1, win2)
+    return (win1, win2)
+
+def cumsort(listscores, deathrate=0.1):
+    newlistscores = sorted(listscores, key=itemgetter(1))[int(len(listscores)*deathrate):]
+
+    lowvalue = newlistscores[0][1]
+    totalsum = 0
+    for i in range(len(newlistscores)):
+        if lowvalue < 0:
+            newlistscores[i][1] -= lowvalue
+        totalsum += newlistscores[i][1]
+
+    to_one = 0
+    for i in range(len(newlistscores)):
+        newlistscores[i][1] /= totalsum
+        to_one += newlistscores[i][1]
+        newlistscores[i][1] = to_one
+
+    return newlistscores
