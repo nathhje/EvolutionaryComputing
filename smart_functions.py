@@ -17,19 +17,19 @@ from operator import itemgetter
 def initial_population(pop_size):
     population = []
     for i in range(pop_size):
-        data =  np.random.randint(2, size=(300, 6))
+        data =  np.random.randint(2, size=(1200, 5))
         population.append(data)
     return population
 
 # 2. Determine fitness
-def fitnesscheck(data):
+def fitnesscheck(data, enemy = [1]):
 
     with open("output.txt", "w") as txt_file:
         for line in data:
             txt_file.write(" ".join(str(line)) + "\n")
 
     # initializes environment with ai player using random controller, playing against static enemy
-    env = Environment(experiment_name=experiment_name, player_controller=player_controller(), speed="fastest")
+    env = Environment(experiment_name=experiment_name, player_controller=player_controller(), speed="fastest", enemies = enemy)
     env.play()
 
     return env.fitness_single()
@@ -133,11 +133,11 @@ def mutate(individual, mutation_rate):
                 individual[gene][which_action] = 0
 
 def pickparentscumsort(listscores):
-    print(listscores)
+    #print(listscores)
     wina = np.random.random()
     winb = np.random.random()
 
-    print(wina, winb)
+    #print(wina, winb)
     bool1 = True
     bool2 = True
     for el in listscores:
@@ -148,17 +148,15 @@ def pickparentscumsort(listscores):
             win2 = el[0]
             bool2 = False
 
-    print(win1, win2)
+    #print(win1, win2)
     return (win1, win2)
 
 def cumsort(listscores, deathrate=0.1):
     newlistscores = sorted(listscores, key=itemgetter(1))[int(len(listscores)*deathrate):]
 
-    lowvalue = newlistscores[0][1]
     totalsum = 0
     for i in range(len(newlistscores)):
-        if lowvalue < 0:
-            newlistscores[i][1] -= lowvalue
+        newlistscores[i][1] = 1.1 ** newlistscores[i][1]
         totalsum += newlistscores[i][1]
 
     to_one = 0

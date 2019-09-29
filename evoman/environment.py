@@ -25,7 +25,7 @@ class Environment(object):
     def __init__(self,
                  experiment_name='test',
                  multiplemode="no",           # yes or no
-                 enemies=[1],                 # array with 1 to 8 items, values from 1 to 8
+                 enemies=[5], #,2,3,4,5,6,7,8],                 # array with 1 to 8 items, values from 1 to 8
                  loadplayer="yes",            # yes or no
                  loadenemy="yes",             # yes or no
                  level=2,                     # integer
@@ -91,7 +91,7 @@ class Environment(object):
 
         # initializes pygame library
         pygame.init()
-        self.print_logs("MESSAGE: Pygame initialized for simulation.")
+        #self.print_logs("MESSAGE: Pygame initialized for simulation.")
 
         # initializes sound library for playing mode
         if self.sound == "on" and self.playermode == "human":
@@ -468,28 +468,30 @@ class Environment(object):
                     return
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     return
-            
-            
+
+
             self.tilemap.update( 33 / 1000., self)
-            '''
-            # updates objects and draws its itens on screen
-            self.screen.fill((250,250,250))
-            self.tilemap.draw(self.screen)
 
-            # player life bar
-            vbar = int(100 *( 1-(self.player.life/float(self.player.max_life)) ))
-            pygame.draw.line(self.screen, (0,   0,   0), [40, 40],[140, 40], 2)
-            pygame.draw.line(self.screen, (0,   0,   0), [40, 45],[140, 45], 5)
-            pygame.draw.line(self.screen, (150,24,25),   [40, 45],[140 - vbar, 45], 5)
-            pygame.draw.line(self.screen, (0,   0,   0), [40, 49],[140, 49], 2)
+            # #updates objects and draws its itens on screen
+            # self.screen.fill((250,250,250))
+            # self.tilemap.update( 33 / 1000., self)
+            # self.tilemap.draw(self.screen)
+            #
+            #
+            # # player life bar
+            # vbar = int(100 *( 1-(self.player.life/float(self.player.max_life)) ))
+            # pygame.draw.line(self.screen, (0,   0,   0), [40, 40],[140, 40], 2)
+            # pygame.draw.line(self.screen, (0,   0,   0), [40, 45],[140, 45], 5)
+            # pygame.draw.line(self.screen, (150,24,25),   [40, 45],[140 - vbar, 45], 5)
+            # pygame.draw.line(self.screen, (0,   0,   0), [40, 49],[140, 49], 2)
+            #
+            # # enemy life bar
+            # vbar = int(100 *( 1-(self.enemy.life/float(self.enemy.max_life)) ))
+            # pygame.draw.line(self.screen, (0,   0,   0), [590, 40],[695, 40], 2)
+            # pygame.draw.line(self.screen, (0,   0,   0), [590, 45],[695, 45], 5)
+            # pygame.draw.line(self.screen, (194,118,55),  [590, 45],[695 - vbar, 45], 5)
+            # pygame.draw.line(self.screen, (0,   0,   0), [590, 49],[695, 49], 2)
 
-            # enemy life bar
-            vbar = int(100 *( 1-(self.enemy.life/float(self.enemy.max_life)) ))
-            pygame.draw.line(self.screen, (0,   0,   0), [590, 40],[695, 40], 2)
-            pygame.draw.line(self.screen, (0,   0,   0), [590, 45],[695, 45], 5)
-            pygame.draw.line(self.screen, (194,118,55),  [590, 45],[695 - vbar, 45], 5)
-            pygame.draw.line(self.screen, (0,   0,   0), [590, 49],[695, 49], 2)
-            '''
 
 
             #gets fitness for training agents
@@ -498,7 +500,7 @@ class Environment(object):
 
             # returns results of the run
             def return_run():
-                self.print_logs("RUN: run status: enemy: "+str(self.enemyn)+"; fitness: " + str(fitness) + "; player life: " + str(self.player.life)  + "; enemy life: " + str(self.enemy.life) + "; time: " + str(self.time))
+                #self.print_logs("RUN: run status: enemy: "+str(self.enemyn)+"; fitness: " + str(fitness) + "; player life: " + str(self.player.life)  + "; enemy life: " + str(self.enemy.life) + "; time: " + str(self.time))
 
                 return  fitness, self.player.life, self.enemy.life, self.time
 

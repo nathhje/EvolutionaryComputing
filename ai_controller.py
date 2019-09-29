@@ -15,17 +15,25 @@ class player_controller(Controller):
 		# Normalises the input using min-max scaling
 		#loads the action list
 
-
+		setar1 = [0, 0, 0, 0, 0]
 		with open("output.txt", "r") as txt_file:
 			for i, line in enumerate(txt_file):
 				if i == self.tick:
 					setar = line.strip("[").strip(']\n').split("  ")
-
-		left = int(setar[0])
-		right = int(setar[1])
-		shoot = int(setar[int(2)])
-		release = int(setar[int(3)])
-		jump = int(setar[4])
+		try:
+			left = int(setar[0])
+			right = int(setar[1])
+			shoot = int(setar[int(2)])
+			release = int(setar[int(3)])
+			jump = int(setar[4])
+		except:
+			print("WERKT NIET", self.tick)
+			input()
+			left = int(setar1[0])
+			right = int(setar1[1])
+			shoot = int(setar1[int(2)])
+			release = int(setar1[int(3)])
+			jump = int(setar1[4])
 
 		self.tick += 1
 		return [left, right, jump, shoot, release]

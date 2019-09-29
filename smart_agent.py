@@ -35,7 +35,7 @@ if not os.path.exists(experiment_name):
     # pop_ranked = rank_scores(current_generation) #2
 
 # The genetic algorithm
-def main(pop_size, mutation_rate, nr_generations, parentchoice="Tournament"):
+def main(pop_size, mutation_rate, nr_generations, parentchoice="Tournament", enemy = 1, runcount = ""):
     growth = []
 
     # 1. Create the population
@@ -49,7 +49,7 @@ def main(pop_size, mutation_rate, nr_generations, parentchoice="Tournament"):
         # 2. Determine fitness
         # check for the entire population the fitness
         for index, data in enumerate(population):
-            fitness = fitnesscheck(data)
+            fitness = fitnesscheck(data, enemy = [enemy])
             listscores.append([index, fitness])
             genfitness += fitness
 
@@ -60,7 +60,6 @@ def main(pop_size, mutation_rate, nr_generations, parentchoice="Tournament"):
         newpopulation = []
         if parentchoice != "Tournament":
             listscores = cumsort(listscores)
-            print("Tournament")
 
         for i in range(int(pop_size/2)):
             # 3. Select the mating pool
@@ -75,8 +74,8 @@ def main(pop_size, mutation_rate, nr_generations, parentchoice="Tournament"):
             child1,child2 = cross(population[win1], population[win2])
             newpopulation.append(child1)
             newpopulation.append(child2)
-            print("nieuwe ronde, nieuwe kansen")
-            print(win1, win2)
+            #print("nieuwe ronde, nieuwe kansen")
+            #print(win1, win2)
 
             # 5. Mutate
             mutate(newpopulation[i], mutation_rate)
@@ -84,18 +83,47 @@ def main(pop_size, mutation_rate, nr_generations, parentchoice="Tournament"):
         population = newpopulation
         growth.append(genfitness/pop_size)
 
+    # Save data
     print(growth)
-    plt.plot(growth)
-    plt.show()
+    save_data(growth, population, runcount, parentchoice, mutation_rate)
+    return growth[-1]
 
+def save_data(growth, population, runcount, parentchoice, mutation_rate):
+    # Last result of population
     with open("endresult.txt", "w") as txt_file:
         for data in population:
             for line in data:
                 txt_file.write(" ".join(str(line)) + "\n")
 
+    # growth results over generations
+    with open("growthresults/growthresults" + parentchoice + str(mutation_rate) + "_" + str(runcount) + ".txt", "w") as txt_file:
+            txt_file.write(str(growth))
+    print("growthresults/growthresults" + parentchoice + str(mutation_rate) + "_" + str(runcount) + ".txt")
+
+def show_results():
+    # last result of population
+    with open("endresult.txt", "r") as txt_file:
+        last_population = txt_file.read()
+
+    # print(last_population)
+
+    # growth results over generations
+    with open("growthresults/growthresults" + parentchoice + str(mutation_rate) + "_" + str(runcount) + ".txt", "r") as txt_file:
+        growth = txt_file.read().strip("[").strip("]").split(", ")
+
+    growth = [float(x) for x in growth]
+    plt.plot(growth)
+    plt.show()
 
 
-######
+
+#####
 # Run the genetic algorithm
 if __name__ == '__main__':
-    main(pop_size=20, mutation_rate=0.01, nr_generations=30)
+
+    hist = []
+    for i in range(50):
+        hist.append(main(pop_size=32, mutation_rate=0.02, nr_generations=50, parentchoice="Density", runcount = i))
+
+    plt.hist(hist)
+    plt.show()
