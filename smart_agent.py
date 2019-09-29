@@ -122,8 +122,8 @@ def show_results():
 if __name__ == '__main__':
 
     hist = []
-    for i in range(50):
-        hist.append(main(pop_size=32, mutation_rate=0.02, nr_generations=50, parentchoice="Density", runcount = i))
+    for i in range(1):
+        hist.append(main(pop_size=32, mutation_rate=0.02, nr_generations=30, parentchoice="density", runcount = i))
 
     plt.hist(hist)
     plt.show()

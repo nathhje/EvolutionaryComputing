@@ -60,7 +60,7 @@ def pickparents(N, listscores):
     return (win1, win2)
 
 # 4. Breed
-def cross(array1, array2):
+def cross(array1, array2, maxchunksize = 50):
     child1 = []
     child2 = []
 
@@ -75,7 +75,7 @@ def cross(array1, array2):
 
         max_length = gene_number-current_gene
 
-        inherit = random.randint(1,50)
+        inherit = random.randint(1, maxsize)
 
         if inherit > max_length:
             inherit = max_length
@@ -148,15 +148,15 @@ def pickparentscumsort(listscores):
             win2 = el[0]
             bool2 = False
 
-    #print(win1, win2)
+    print(win1, win2)
     return (win1, win2)
 
-def cumsort(listscores, deathrate=0.1):
+def cumsort(listscores, deathrate=0.1, param = 1.09):
     newlistscores = sorted(listscores, key=itemgetter(1))[int(len(listscores)*deathrate):]
 
     totalsum = 0
     for i in range(len(newlistscores)):
-        newlistscores[i][1] = 1.1 ** newlistscores[i][1]
+        newlistscores[i][1] = param ** newlistscores[i][1]
         totalsum += newlistscores[i][1]
 
     to_one = 0
@@ -165,4 +165,5 @@ def cumsort(listscores, deathrate=0.1):
         to_one += newlistscores[i][1]
         newlistscores[i][1] = to_one
 
+    #print(newlistscores)
     return newlistscores
