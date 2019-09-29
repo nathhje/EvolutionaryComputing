@@ -75,7 +75,7 @@ def cross(array1, array2, maxchunksize = 50):
 
         max_length = gene_number-current_gene
 
-        inherit = random.randint(1, maxsize)
+        inherit = random.randint(1, maxchunksize)
 
         if inherit > max_length:
             inherit = max_length

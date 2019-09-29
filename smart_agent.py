@@ -37,51 +37,101 @@ if not os.path.exists(experiment_name):
 # The genetic algorithm
 def main(pop_size, mutation_rate, nr_generations, parentchoice="Tournament", enemy = 1, runcount = ""):
     growth = []
+    generation = 0
 
     # 1. Create the population
     population = initial_population(pop_size)
 
-    for j in range(nr_generations):
-        # population = nextgeneration(population, mutation_rate)
-        listscores = []
-        genfitness = 0
+    if nr_generations == 0:
+        while generation < 50:
+            if generation > 3 and sum(np.diff((growth[generation - 3], growth[generation - 2], growth[generation-1]))) == 0:
+                break
 
-        # 2. Determine fitness
-        # check for the entire population the fitness
-        for index, data in enumerate(population):
-            fitness = fitnesscheck(data, enemy = [enemy])
-            listscores.append([index, fitness])
-            genfitness += fitness
+            # population = nextgeneration(population, mutation_rate)
+            listscores = []
+            genfitness = 0
 
-        print("De "+ str(j) + "e generatie heeft een gemiddelde score van ", genfitness/pop_size)
+            # 2. Determine fitness
+            # check for the entire population the fitness
+            for index, data in enumerate(population):
+                fitness = fitnesscheck(data, enemy = [enemy])
+                listscores.append([index, fitness])
+                genfitness += fitness
+
+            print("De "+ str(generation) + "e generatie heeft een gemiddelde score van ", genfitness/pop_size)
 
 
-        # Make N new individuals for the next generation
-        newpopulation = []
-        if parentchoice != "Tournament":
-            listscores = cumsort(listscores)
+            # Make N new individuals for the next generation
+            newpopulation = []
+            if parentchoice != "Tournament":
+                listscores = cumsort(listscores)
 
-        for i in range(int(pop_size/2)):
-            # 3. Select the mating pool
-            # Kiest twee parents tournament style
-            if parentchoice == "Tournament":
-                win1, win2 = pickparents(pop_size, listscores)
-            else:
-                win1, win2 = pickparentscumsort(listscores)
+            for i in range(int(pop_size/2)):
+                # 3. Select the mating pool
+                # Kiest twee parents tournament style
+                if parentchoice == "Tournament":
+                    win1, win2 = pickparents(pop_size, listscores)
+                else:
+                    win1, win2 = pickparentscumsort(listscores)
 
-            # 4. Breed
-            # Crossbreed een nieuw child
-            child1,child2 = cross(population[win1], population[win2])
-            newpopulation.append(child1)
-            newpopulation.append(child2)
-            #print("nieuwe ronde, nieuwe kansen")
-            #print(win1, win2)
+                # 4. Breed
+                # Crossbreed een nieuw child
+                child1,child2 = cross(population[win1], population[win2])
+                newpopulation.append(child1)
+                newpopulation.append(child2)
+                #print("nieuwe ronde, nieuwe kansen")
+                #print(win1, win2)
 
-            # 5. Mutate
-            mutate(newpopulation[i], mutation_rate)
+                # 5. Mutate
+                mutate(newpopulation[i], mutation_rate)
 
-        population = newpopulation
-        growth.append(genfitness/pop_size)
+            population = newpopulation
+            growth.append(genfitness/pop_size)
+
+            generation = generation + 1
+
+    else: 
+        for j in range(nr_generations):
+            # population = nextgeneration(population, mutation_rate)
+            listscores = []
+            genfitness = 0
+
+            # 2. Determine fitness
+            # check for the entire population the fitness
+            for index, data in enumerate(population):
+                fitness = fitnesscheck(data, enemy = [enemy])
+                listscores.append([index, fitness])
+                genfitness += fitness
+
+            print("De "+ str(j) + "e generatie heeft een gemiddelde score van ", genfitness/pop_size)
+
+
+            # Make N new individuals for the next generation
+            newpopulation = []
+            if parentchoice != "Tournament":
+                listscores = cumsort(listscores)
+
+            for i in range(int(pop_size/2)):
+                # 3. Select the mating pool
+                # Kiest twee parents tournament style
+                if parentchoice == "Tournament":
+                    win1, win2 = pickparents(pop_size, listscores)
+                else:
+                    win1, win2 = pickparentscumsort(listscores)
+
+                # 4. Breed
+                # Crossbreed een nieuw child
+                child1,child2 = cross(population[win1], population[win2])
+                newpopulation.append(child1)
+                newpopulation.append(child2)
+                #print("nieuwe ronde, nieuwe kansen")
+                #print(win1, win2)
+
+                # 5. Mutate
+                mutate(newpopulation[i], mutation_rate)
+
+            population = newpopulation
+            growth.append(genfitness/pop_size)
 
     # Save data
     print(growth)
@@ -123,7 +173,7 @@ if __name__ == '__main__':
 
     hist = []
     for i in range(1):
-        hist.append(main(pop_size=32, mutation_rate=0.02, nr_generations=30, parentchoice="density", runcount = i))
+        hist.append(main(pop_size=30, mutation_rate=0.02, nr_generations=0, parentchoice="density", runcount = i))
 
     plt.hist(hist)
     plt.show()
