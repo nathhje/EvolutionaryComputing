@@ -55,6 +55,8 @@ def main(pop_size, mutation_rate, nr_generations, parentchoice="Tournament", ene
         # check for the entire population the fitness
         for index, data in enumerate(population):
             fitness = fitnesscheck(data, enemy = [enemy])
+            if fitness > 90:
+                save_good_result(data,fitness,generation)
             listscores.append([index, fitness])
             genfitness += fitness
 
@@ -92,20 +94,22 @@ def main(pop_size, mutation_rate, nr_generations, parentchoice="Tournament", ene
 
     # Save data
     print(growth)
-    save_data(growth, population, runcount, parentchoice, mutation_rate)
-    return growth[-1]
+    #save_data(growth, population, runcount, parentchoice, mutation_rate)
+    return growth
 
-def save_data(growth, population, runcount, parentchoice, mutation_rate):
-    # Last result of population
-    with open("endresult.txt", "w") as txt_file:
-        for data in population:
-            for line in data:
-                txt_file.write(" ".join(str(line)) + "\n")
+def save_data(growth):
+    
+    with open("growthresults/growthresults"+ parentchoice+ "level"+ str(enemy) +"mutation"+ str(mutation_rate) +".txt", "w") as txt_file:
+        
+        for row in growth:
+            txt_file.write(str(row)+"\n")
 
-    # growth results over generations
-    with open("growthresults/growthresults" + parentchoice + str(mutation_rate) + "_" + str(runcount) + ".txt", "w") as txt_file:
-            txt_file.write(str(growth))
-    print("growthresults/growthresults" + parentchoice + str(mutation_rate) + "_" + str(runcount) + ".txt")
+    
+def save_good_result(data,fitness,generation):
+    
+    with open("bestresults/bestresultgeneration" + str(generation) + "fitness"+ str(fitness) + parentchoice+ "level"+ str(enemy) +"mutation"+ str(mutation_rate) +".txt", "w") as txt_file:
+        for line in data:
+            txt_file.write(" ".join(str(line)) + "\n")
 
 def show_results():
     # last result of population
@@ -127,10 +131,18 @@ def show_results():
 #####
 # Run the genetic algorithm
 if __name__ == '__main__':
+    
+    parentchoice="Tournament" # Tournament or Density
+    mutation_rate=0.005
+    enemy = 1
 
     hist = []
-    for i in range(1):
-        hist.append(main(pop_size=30, mutation_rate=0.02, nr_generations=50, parentchoice="density", runcount = i))
+    thegrowths = []
+    for i in range(20):
+        thegrowths.append(main(pop_size=40, mutation_rate=mutation_rate, nr_generations=60, parentchoice=parentchoice, runcount = i, enemy = enemy))
+        hist.append(thegrowths[-1][-1])
 
+    save_data(thegrowths)
+    
     plt.hist(hist)
     plt.show()

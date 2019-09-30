@@ -59,6 +59,42 @@ def pickparents(N, listscores):
                 break
     return (win1, win2)
 
+def pickparentscumsort(listscores):
+    #print(listscores)
+    wina = np.random.random()
+    winb = np.random.random()
+
+    #print(wina, winb)
+    bool1 = True
+    bool2 = True
+    for el in listscores:
+        if el[1] > wina and bool1:
+            win1 = el[0]
+            bool1 = False
+        if el[1] > winb and bool2:
+            win2 = el[0]
+            bool2 = False
+
+    #print(win1, win2)
+    return (win1, win2)
+
+def cumsort(listscores, deathrate=0.1, param = 1.09):
+    newlistscores = sorted(listscores, key=itemgetter(1))[int(len(listscores)*deathrate):]
+
+    totalsum = 0
+    for i in range(len(newlistscores)):
+        newlistscores[i][1] = param ** newlistscores[i][1]
+        totalsum += newlistscores[i][1]
+
+    to_one = 0
+    for i in range(len(newlistscores)):
+        newlistscores[i][1] /= totalsum
+        to_one += newlistscores[i][1]
+        newlistscores[i][1] = to_one
+
+    #print(newlistscores)
+    return newlistscores
+
 # 4. Breed
 def cross(array1, array2, maxchunksize = 50):
     child1 = []
@@ -113,10 +149,10 @@ def mutate(individual, mutation_rate):
     # krijgt een individu een mutatie
     if mutation_decision < mutation_rate * 100:
 
-        number_of_genes = 300
+        number_of_genes = 1200
 
         # hoeveel mutaties krijgt een individu
-        mut_rate_calc = min(np.random.poisson((number_of_genes * mutation_rate), 1), 300)
+        mut_rate_calc = min(np.random.poisson((number_of_genes * mutation_rate), 1), 1200)
 
         # welke genen (regels) worden er aangepast
         which_genes = random.sample(range(len(individual)), int(mut_rate_calc))
@@ -132,38 +168,4 @@ def mutate(individual, mutation_rate):
             else:
                 individual[gene][which_action] = 0
 
-def pickparentscumsort(listscores):
-    #print(listscores)
-    wina = np.random.random()
-    winb = np.random.random()
 
-    #print(wina, winb)
-    bool1 = True
-    bool2 = True
-    for el in listscores:
-        if el[1] > wina and bool1:
-            win1 = el[0]
-            bool1 = False
-        if el[1] > winb and bool2:
-            win2 = el[0]
-            bool2 = False
-
-    print(win1, win2)
-    return (win1, win2)
-
-def cumsort(listscores, deathrate=0.1, param = 1.09):
-    newlistscores = sorted(listscores, key=itemgetter(1))[int(len(listscores)*deathrate):]
-
-    totalsum = 0
-    for i in range(len(newlistscores)):
-        newlistscores[i][1] = param ** newlistscores[i][1]
-        totalsum += newlistscores[i][1]
-
-    to_one = 0
-    for i in range(len(newlistscores)):
-        newlistscores[i][1] /= totalsum
-        to_one += newlistscores[i][1]
-        newlistscores[i][1] = to_one
-
-    #print(newlistscores)
-    return newlistscores
