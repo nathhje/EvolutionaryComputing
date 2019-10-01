@@ -42,7 +42,7 @@ def main(pop_size, mutation_rate, nr_generations, parentchoice="Tournament", ene
     # 1. Create the population
     population = initial_population(pop_size)
 
-    
+
     while generation < nr_generations:
         if generation > 3 and sum(np.diff((growth[generation - 3], growth[generation - 2], growth[generation-1]))) == 0:
             break
@@ -98,15 +98,15 @@ def main(pop_size, mutation_rate, nr_generations, parentchoice="Tournament", ene
     return growth
 
 def save_data(growth,parentchoice,mutation_rate,enemy):
-    
+
     with open("growthresults/growthresults"+ parentchoice+ "level"+ str(enemy) +"mutation"+ str(mutation_rate) +".txt", "w") as txt_file:
-        
+
         for row in growth:
             txt_file.write(str(row)+"\n")
 
-    
+
 def save_good_result(data,fitness,generation,parentchoice,mutation_rate,enemy):
-    
+
     with open("bestresults/bestresultgeneration" + str(generation) + "fitness"+ str(fitness) + parentchoice+ "level"+ str(enemy) +"mutation"+ str(mutation_rate) +".txt", "w") as txt_file:
         for line in data:
             txt_file.write(" ".join(str(line)) + "\n")
@@ -114,18 +114,23 @@ def save_good_result(data,fitness,generation,parentchoice,mutation_rate,enemy):
 #####
 # Run the genetic algorithm
 if __name__ == '__main__':
-    
-    selection="Tournament" # Tournament or Density
-    m_rate=0.005 # 0.005, 0.01, 0.015, 0.02, 0.025, 0.03
-    level = 1 # 1, 6, 8
+
+    selection="Fitness" # Tournament or Density
+    m_rate=0.01 # 0.005, 0.01, 0.015, 0.02, 0.025, 0.03
+    level = 6 # 1, 6, 8
+
+    with open("teststructure.txt", "a") as txt_file:
+        txt_file.write("And again \n")
 
     hist = []
     thegrowths = []
-    for i in range(20):
+    for i in range(14):
         thegrowths.append(main(pop_size=40, mutation_rate=m_rate, nr_generations=60, parentchoice=selection, enemy = level))
+        with open("teststructure.txt", "a") as txt_file:
+            txt_file.write(str(thegrowths[-1])+ "\n")
         hist.append(thegrowths[-1][-1])
 
     save_data(thegrowths,selection,m_rate,level)
-    
+
     plt.hist(hist)
     plt.show()
