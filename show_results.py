@@ -14,7 +14,7 @@ import pandas as pd
 def main(parentchoice,enemy, mutation_rate):
     # open data from txt file
     growth_results = open_data(parentchoice,enemy, mutation_rate)
-
+    print(growth_results)
 
     # show the results
     # show_all_growth_results(growth_results)
@@ -24,16 +24,22 @@ def main(parentchoice,enemy, mutation_rate):
 # OPEN DATA
 def open_data(parentchoice,enemy, mutation_rate):
     # The growth results
-    with open("Final_results/growthresults/growthresults"+ parentchoice + "level"+ str(enemy) +"mutation"+ str(mutation_rate) +".txt", "r") as txt_file:
-        results = txt_file.read().split('\n') #list
+
+    filename = "growthresults/growthresults"+ parentchoice + "level"+ str(enemy) +"mutation"+ str(mutation_rate) +".txt"
+
+    with open(filename, "r") as txt_file:
+        results = txt_file.read().split('\n')
+
+        if len(results) % 2 == 1:
+            results.pop(-1)
 
         for i in range(len(results)):
             results[i] = results[i].strip("[").strip("]")
             results[i] = results[i].split(",")
-            
+
             for j in range(len(results[i])):
                 results[i][j] = float(results[i][j].strip())
-                
+
     return results
 
 # SHOW RESULTS
@@ -56,7 +62,7 @@ def show_hist_growth_results():
         hist_growth.append(generation[-1])
 
     plt.hist(hist_growth)
-    plt.title('Histogram of generation growth' + selection + m_rate + level)
+    # plt.title('Histogram of generation growth' + selection + m_rate + level)
     plt.show()
 
 def klad():
@@ -79,7 +85,7 @@ def plotss():
 if __name__ == '__main__':
 
     selection="Density" # Tournament or Density
-    m_rate=0.005 # 0.005, 0.01, 0.015, 0.02, 0.025, 0.03
+    m_rate=0.015 # 0.005, 0.01, 0.015, 0.02, 0.025, 0.03
     level = 1 # 1, 6, 8
 
     main(parentchoice=selection, enemy = level, mutation_rate= m_rate)
