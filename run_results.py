@@ -15,7 +15,7 @@ if not os.path.exists(experiment_name):
 
 import glob
 import errno
-path = '/Users/Julia/Dropbox/Master/Evolutionary computing/EvolutionaryComputing/bestresults/bestresultsDensitylevel8mutation0.025/*.txt'
+path = '/Users/Julia/Dropbox/Master/Evolutionary computing/EvolutionaryComputing/bestresults/bestresultsDensitylevel1mutation0.01/*.txt'
 files = glob.glob(path)
 
 for file in files:
@@ -27,8 +27,8 @@ for file in files:
 	    copy.write(line)
 
 # initializes environment with ai player using random controller, playing against static enemy
-	env = Environment(experiment_name=experiment_name, player_controller=player_controller(), speed="fastest", enemies = [8])
+	env = Environment(experiment_name=experiment_name, player_controller=player_controller(), speed="fastest", enemies = [1])
 	alle = env.play()
 
-	with open("run/Densitylevel8mutation0.025.txt", "a") as txt_file:
+	with open("run/test.txt", "a") as txt_file:
 		txt_file.write(str(index) + ": " + str(alle) + "\n")
