@@ -23,19 +23,24 @@ def func_growth_results(parentchoice,enemy, mutation_rate):
     # show_single_growth_results(growth_tournament)
     show_both_growth_results(growth_tournament, growth_density)
 
-# def func_all_growth_results():
-#     mutation = [0.005,0.01,0.015,0.02,0.025,0.03]
-#     selection = ["Tournament","Density"]
-#     level = [1,6,8]
-#
-#     dataset = []
-#     for mutate in mutation:
-#         for select in selection:
-#             for lev in level:
-#                 data = open_data(select, lev, mutate)
-#                 dataset.append([data])
-#
-#     print(dataset)
+# def show_all_growth_results(dataset):
+def all_growth_results():
+    mutation = [0.005,0.01,0.015,0.02,0.025,0.03]
+    level = [1,6,8]
+
+    dataset = []
+    for lev in level:
+        tour_array = []
+        density_array = []
+        for mutate in mutation:
+            print('mutation', mutate, 'level', lev)
+            #func_growth_results(parentchoice='Tournament', enemy = lev, mutation_rate= mutate)
+            growth_tournament = open_data("Tournament",lev, mutate)
+            tour_array = tour_array + growth_tournament
+            growth_density = open_data("Density",lev, mutate)
+            density_array = density_array + growth_density
+
+        show_both_growth_results(tour_array, density_array, lev)
 
 
 def t_test_results(enemy, mutation_rate):
@@ -101,7 +106,7 @@ def show_single_growth_results(growth_results):
     plt.legend()
     plt.show()
 
-def show_both_growth_results(growth_tournament, growth_density):
+def show_both_growth_results(growth_tournament, growth_density, lev = ""):
     # Shows both the mean, sd over time of tournament and density
     oldgrowth_tour = growth_tournament.copy()
     newgrowth_tour = list(map(list, zip(*oldgrowth_tour)))
@@ -124,51 +129,26 @@ def show_both_growth_results(growth_tournament, growth_density):
     upperbound_dens = [m + s for m, s in zip(mean_dens, sd_dens)]
     lowerbound_dens = [m - s for m, s in zip(mean_dens, sd_dens)]
 
-
     # plot
     plt.plot(mean_tour, label = "mean tournament")
-    plt.plot(mean_dens, label = "mean density")
+    plt.plot(mean_dens, label = "mean fitness proportionate")
     plt.fill_between(range(len(mean_tour)), upperbound_tour, lowerbound_tour, alpha = 0.1, label = "sd tournament")
-    plt.fill_between(range(len(mean_dens)), upperbound_dens, lowerbound_dens, alpha = 0.1, label = "sd density")
-    plt.title('Growth of the fitness over the generations')
-    plt.xlabel('Number of generation')
+    plt.fill_between(range(len(mean_dens)), upperbound_dens, lowerbound_dens, alpha = 0.1, label = "sd fitness proportionate")
+    plt.title('Growth of the fitness over the generations (level ' + str(lev) + ')')
+    plt.xlabel('Number of generations')
     plt.ylabel('Fitness')
     plt.ylim((0,100))
     plt.legend()
     plt.show()
 
-# def show_all_growth_results(dataset):
-def all_growth_results():
-    mutation = [0.005,0.01,0.015,0.02,0.025,0.03]
-    level = [1,6,8]
-
-    dataset = []
-    for mutate in mutation:
-        for lev in level:
-            print('mutation', mutate, 'level', lev)
-            func_growth_results(parentchoice='Tournament', enemy = lev, mutation_rate= mutate)
-
-
-def new_try():
-    mutation = [0.005,0.01,0.015,0.02,0.025,0.03]
-    level = [1,6,8]
-
-    dataset = []
-    for mutate in mutation:
-        for lev in level:
-            print('mutation', mutate, 'level', lev)
-            func_growth_results(parentchoice='Tournament', enemy = lev, mutation_rate= mutate)
-
 
 # Run the program
 selection="Density" # Tournament or Density
 m_rate= 0.015 # 0.005, 0.01, 0.015, 0.02, 0.025, 0.03
-level = 1 # 1, 6, 8
+level = 8 # 1, 6, 8
 
 
-# func_growth_results(parentchoice=selection, enemy = level, mutation_rate= m_rate)
-# func_all_growth_results()
+#func_growth_results(parentchoice=selection, enemy = level, mutation_rate= m_rate)
+all_growth_results()
 # result = t_test_results(1, 0.005)
 # print(result)
-
-all_growth_results()
