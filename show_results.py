@@ -11,6 +11,7 @@ import seaborn as sns
 import pandas as pd
 import numpy as np
 import copy
+from scipy import stats
 
 # GENERAL FUNCTIONS
 def func_growth_results(parentchoice,enemy, mutation_rate):
@@ -21,6 +22,19 @@ def func_growth_results(parentchoice,enemy, mutation_rate):
     # show the results
     # show_single_growth_results(growth_tournament)
     show_both_growth_results(growth_tournament, growth_density)
+
+def t_test_results(enemy, mutation_rate):
+    # open data from txt file
+    growth_tournament = open_data("Tournament",enemy, mutation_rate)
+    growth_density = open_data("Density",enemy, mutation_rate)
+
+    # show the results
+    oldgrowth_tour = growth_tournament.copy()
+    newgrowth_tour = list(map(list, zip(*oldgrowth_tour)))
+    oldgrowth_dens = growth_density.copy()
+    newgrowth_dens = list(map(list, zip(*oldgrowth_dens)))
+
+    return stats.ttest_ind(newgrowth_dens[-1], newgrowth_tour[-1])
 
 
 # OPEN DATA
@@ -114,4 +128,6 @@ selection="Density" # Tournament or Density
 m_rate= 0.015 # 0.005, 0.01, 0.015, 0.02, 0.025, 0.03
 level = 1 # 1, 6, 8
 
-func_growth_results(parentchoice=selection, enemy = level, mutation_rate= m_rate)
+#func_growth_results(parentchoice=selection, enemy = level, mutation_rate= m_rate)
+result = t_test_results(1, 0.005)
+print(result)
