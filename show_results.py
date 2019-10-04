@@ -23,6 +23,21 @@ def func_growth_results(parentchoice,enemy, mutation_rate):
     # show_single_growth_results(growth_tournament)
     show_both_growth_results(growth_tournament, growth_density)
 
+# def func_all_growth_results():
+#     mutation = [0.005,0.01,0.015,0.02,0.025,0.03]
+#     selection = ["Tournament","Density"]
+#     level = [1,6,8]
+#
+#     dataset = []
+#     for mutate in mutation:
+#         for select in selection:
+#             for lev in level:
+#                 data = open_data(select, lev, mutate)
+#                 dataset.append([data])
+#
+#     print(dataset)
+
+
 def t_test_results(enemy, mutation_rate):
     # open data from txt file
     growth_tournament = open_data("Tournament",enemy, mutation_rate)
@@ -36,11 +51,10 @@ def t_test_results(enemy, mutation_rate):
 
     return stats.ttest_ind(newgrowth_dens[-1], newgrowth_tour[-1])
 
-
 # OPEN DATA
 def open_data(parentchoice,enemy, mutation_rate):
     # The growth results
-    filename = "growthresults/growthresults"+ parentchoice + "level"+ str(enemy) +"mutation"+ str(mutation_rate) +".txt"
+    filename = "allgrowthresults/growthresults"+ parentchoice + "level"+ str(enemy) +"mutation"+ str(mutation_rate) +".txt"
 
     with open(filename, "r") as txt_file:
         results = txt_file.read().split('\n')
@@ -110,6 +124,7 @@ def show_both_growth_results(growth_tournament, growth_density):
     upperbound_dens = [m + s for m, s in zip(mean_dens, sd_dens)]
     lowerbound_dens = [m - s for m, s in zip(mean_dens, sd_dens)]
 
+
     # plot
     plt.plot(mean_tour, label = "mean tournament")
     plt.plot(mean_dens, label = "mean density")
@@ -122,12 +137,38 @@ def show_both_growth_results(growth_tournament, growth_density):
     plt.legend()
     plt.show()
 
+# def show_all_growth_results(dataset):
+def all_growth_results():
+    mutation = [0.005,0.01,0.015,0.02,0.025,0.03]
+    level = [1,6,8]
+
+    dataset = []
+    for mutate in mutation:
+        for lev in level:
+            print('mutation', mutate, 'level', lev)
+            func_growth_results(parentchoice='Tournament', enemy = lev, mutation_rate= mutate)
+
+
+def new_try():
+    mutation = [0.005,0.01,0.015,0.02,0.025,0.03]
+    level = [1,6,8]
+
+    dataset = []
+    for mutate in mutation:
+        for lev in level:
+            print('mutation', mutate, 'level', lev)
+            func_growth_results(parentchoice='Tournament', enemy = lev, mutation_rate= mutate)
+
 
 # Run the program
 selection="Density" # Tournament or Density
 m_rate= 0.015 # 0.005, 0.01, 0.015, 0.02, 0.025, 0.03
 level = 1 # 1, 6, 8
 
-#func_growth_results(parentchoice=selection, enemy = level, mutation_rate= m_rate)
-result = t_test_results(1, 0.005)
-print(result)
+
+# func_growth_results(parentchoice=selection, enemy = level, mutation_rate= m_rate)
+# func_all_growth_results()
+# result = t_test_results(1, 0.005)
+# print(result)
+
+all_growth_results()
