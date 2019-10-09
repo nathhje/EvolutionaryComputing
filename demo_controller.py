@@ -14,6 +14,8 @@ class player_controller(Controller):
 		# Normalises the input using min-max scaling
 		inputs = (inputs-min(inputs))/float((max(inputs)-min(inputs)))
 
+		controller = np.random.randomint(0, size=(self.n_hidden[0] + len(inputs)*self.n_hidden[0] + 5 + self.n_hidden[0]*5))
+
 		if self.n_hidden[0]>0:
 			# Preparing the weights and biases from the controller of layer 1
 
