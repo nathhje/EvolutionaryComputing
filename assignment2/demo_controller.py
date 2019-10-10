@@ -1,10 +1,11 @@
+from controller import Controller
 import numpy as np
 
 def sigmoid_activation(x):
 	return 1./(1.+np.exp(-x))
 
 # implements controller structure for player
-class player_controller():
+class player_controller(Controller):
 	def __init__(self):
 		# Number of hidden neurons
 		self.n_hidden = [10]
@@ -12,8 +13,6 @@ class player_controller():
 	def control(self, inputs,controller):
 		# Normalises the input using min-max scaling
 		inputs = (inputs-min(inputs))/float((max(inputs)-min(inputs)))
-
-		controller = np.random.randint(-5, 5, size=(self.n_hidden[0] + len(inputs)*self.n_hidden[0] + 5 + self.n_hidden[0]*5))*0.1
 
 		if self.n_hidden[0]>0:
 			# Preparing the weights and biases from the controller of layer 1
@@ -38,7 +37,7 @@ class player_controller():
 			weights = controller[5:].reshape((len(inputs), 5))
 
 			output = sigmoid_activation(inputs.dot(weights) + bias)[0]
-		print(output)
+
 		# takes decisions about sprite actions
 		if output[0] > 0.5:
 			left = 1
@@ -68,7 +67,7 @@ class player_controller():
 		return [left, right, jump, shoot, release]
 
 # implements controller structure for enemy
-class enemy_controller():
+class enemy_controller(Controller):
 	def __init__(self):
 		# Number of hidden neurons
 		self.n_hidden = [10]
@@ -77,13 +76,10 @@ class enemy_controller():
 		# Normalises the input using min-max scaling
 		inputs = (inputs-min(inputs))/float((max(inputs)-min(inputs)))
 
-		controller = np.random.randomint(0, size=(self.n_hidden[0] + len(inputs)*self.n_hidden[0] + 5 + self.n_hidden[0]*5))
-
 		if self.n_hidden[0]>0:
 			# Preparing the weights and biases from the controller of layer 1
 
 			# Biases for the n hidden neurons
-			print(bias1)
 			bias1 = controller[:self.n_hidden[0]].reshape(1,self.n_hidden[0])
 			# Weights for the connections from the inputs to the hidden nodes
 			weights1_slice = len(inputs)*self.n_hidden[0] + self.n_hidden[0]
