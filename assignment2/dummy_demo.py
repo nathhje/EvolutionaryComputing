@@ -6,8 +6,7 @@
 
 # imports framework
 import sys, os
-from demo_controller import player_controller
-sys.path.insert(0, 'evoman')
+sys.path.insert(0, 'evoman') 
 from environment import Environment
 
 experiment_name = 'dummy_demo'
@@ -15,7 +14,6 @@ if not os.path.exists(experiment_name):
     os.makedirs(experiment_name)
 
 # initializes environment with ai player using random controller, playing against static enemy
-env = Environment(experiment_name=experiment_name, player_controller=player_controller(), speed="normal")
+env = Environment(experiment_name=experiment_name)
 env.play()
 
-print(env.fitness_single())
